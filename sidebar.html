@@ -30,55 +30,110 @@
     /* Header */
     .header {
       padding: 16px;
-      border-bottom: 1px solid #e0e0e0;
-      background: #f8f9fa;
+      border-bottom: 1px solid #f0f0f0;
+      background: white;
       flex-shrink: 0;
     }
     
-    .header h2 {
-      font-size: 16px;
-      font-weight: 600;
-      color: #1a73e8;
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 12px;
+      gap: 8px;
+    }
+    
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+    }
+    
+    .header h2 {
+      font-size: 15px;
+      font-weight: 600;
+      color: #333;
+      margin: 0;
+    }
+    
+    .close-btn {
+      width: 20px;
+      height: 20px;
+      background: transparent;
+      border: none;
+      border-radius: 3px;
+      color: #999;
+      font-size: 18px;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      padding: 0;
+    }
+    
+    .close-btn:hover {
+      background: #f0f0f0;
+      color: #333;
+    }
+    
+    .switch-side-btn {
+      width: 24px;
+      height: 24px;
+      background: transparent;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      color: #666;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    
+    .switch-side-btn:hover {
+      background: #f5f5f5;
+      border-color: #ccc;
+      color: #333;
     }
     
     /* Navigation Tabs */
     .nav-tabs {
       display: flex;
-      gap: 8px;
+      gap: 4px;
       margin-bottom: 12px;
+      background: #f5f5f5;
+      padding: 3px;
+      border-radius: 6px;
     }
     
     .nav-tab {
       flex: 1;
-      padding: 8px 12px;
-      background: white;
-      border: 1px solid #dadce0;
-      border-radius: 8px;
+      padding: 6px 12px;
+      background: transparent;
+      border: none;
+      border-radius: 4px;
       font-size: 12px;
       font-weight: 500;
-      color: #5f6368;
+      color: #666;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.15s;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
     }
     
     .nav-tab:hover {
-      background: #f8f9fa;
-      border-color: #c1c1c1;
+      color: #333;
     }
     
     .nav-tab.active {
-      background: #1a73e8;
-      color: white;
-      border-color: #1a73e8;
-    }
-    
-    .tab-icon {
-      font-size: 14px;
+      background: white;
+      color: #333;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
     
     /* Context Info */
@@ -87,9 +142,9 @@
     }
     
     .context-title {
-      font-size: 13px;
-      color: #5f6368;
-      font-weight: 500;
+      font-size: 12px;
+      color: #666;
+      font-weight: 400;
       margin-top: 6px;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -99,11 +154,11 @@
     
     .context-app {
       display: inline-block;
-      padding: 2px 8px;
-      background: #e8f0fe;
-      color: #1a73e8;
-      border-radius: 12px;
-      font-size: 11px;
+      padding: 2px 6px;
+      background: #f5f5f5;
+      color: #666;
+      border-radius: 3px;
+      font-size: 10px;
       font-weight: 500;
       text-transform: uppercase;
     }
@@ -122,42 +177,42 @@
     
     .control-label {
       display: block;
-      font-size: 11px;
-      font-weight: 600;
-      color: #5f6368;
+      font-size: 10px;
+      font-weight: 500;
+      color: #888;
       margin-bottom: 4px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.3px;
     }
     
     .filter-select {
       width: 100%;
-      padding: 8px;
-      border: 1px solid #dadce0;
-      border-radius: 6px;
+      padding: 7px 8px;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
       font-size: 12px;
       background: white;
       color: #333;
       cursor: pointer;
-      transition: border-color 0.2s;
+      transition: border-color 0.15s;
     }
     
     .filter-select:focus {
       outline: none;
-      border-color: #1a73e8;
+      border-color: #999;
     }
     
     /* Stats Bar */
     .stats-bar {
       display: flex;
       justify-content: space-between;
-      padding: 12px;
-      background: #e8f0fe;
-      border-radius: 8px;
-      margin-bottom: 16px;
-      font-size: 12px;
+      padding: 10px 12px;
+      background: #f8f8f8;
+      border-radius: 4px;
+      margin-bottom: 12px;
+      font-size: 11px;
       font-weight: 500;
-      color: #1a73e8;
+      color: #666;
     }
     
     /* View Content */
@@ -179,12 +234,12 @@
     }
     
     .section-title {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
-      color: #5f6368;
-      margin-bottom: 12px;
+      color: #888;
+      margin-bottom: 10px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.3px;
     }
     
     .notes-list {
@@ -192,18 +247,18 @@
     }
     
     .note-item {
-      background: #f8f9fa;
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
+      background: white;
+      border: 1px solid #f0f0f0;
+      border-radius: 6px;
       padding: 12px;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       position: relative;
-      transition: all 0.2s ease;
+      transition: all 0.15s ease;
     }
     
     .note-item:hover {
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      border-color: #d0d0d0;
+      border-color: #e0e0e0;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
     }
     
     .note-header {
@@ -217,17 +272,17 @@
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      padding: 2px 8px;
-      background: #e8f0fe;
-      color: #1a73e8;
-      border-radius: 12px;
-      font-size: 10px;
+      padding: 2px 6px;
+      background: #f5f5f5;
+      color: #666;
+      border-radius: 3px;
+      font-size: 9px;
       font-weight: 500;
     }
     
     .note-context-title {
-      font-size: 11px;
-      color: #5f6368;
+      font-size: 10px;
+      color: #999;
       font-style: italic;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -245,8 +300,8 @@
     }
     
     .note-meta {
-      font-size: 11px;
-      color: #5f6368;
+      font-size: 10px;
+      color: #999;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -259,49 +314,51 @@
     .note-delete {
       background: none;
       border: none;
-      color: #d93025;
+      color: #999;
       cursor: pointer;
-      font-size: 11px;
-      font-weight: 500;
-      padding: 4px 8px;
-      border-radius: 4px;
-      transition: background 0.2s;
+      font-size: 10px;
+      font-weight: 400;
+      padding: 3px 6px;
+      border-radius: 3px;
+      transition: all 0.15s;
     }
     
     .note-delete:hover {
-      background: #fce8e6;
+      background: #fee;
+      color: #c00;
     }
     
     .empty-state {
       text-align: center;
       padding: 40px 20px;
-      color: #5f6368;
+      color: #999;
     }
     
     .empty-state-icon {
-      font-size: 48px;
-      margin-bottom: 12px;
-      opacity: 0.3;
+      font-size: 14px;
+      margin-bottom: 8px;
+      opacity: 0.5;
+      font-weight: 500;
     }
     
     .empty-state-text {
-      font-size: 13px;
+      font-size: 12px;
     }
     
     /* Related notes section */
     .related-notes {
-      margin-top: 24px;
+      margin-top: 20px;
       padding-top: 16px;
-      border-top: 1px solid #e0e0e0;
+      border-top: 1px solid #f0f0f0;
     }
     
     .related-note-item {
-      background: #fff3e0;
-      border: 1px solid #ffe0b2;
+      background: #fafafa;
+      border: 1px solid #f0f0f0;
     }
     
     .related-note-item:hover {
-      border-color: #ffcc80;
+      border-color: #e0e0e0;
     }
     
     /* Add note section */
@@ -314,65 +371,64 @@
     
     .add-note-form textarea {
       width: 100%;
-      min-height: 80px;
-      padding: 12px;
-      border: 1px solid #dadce0;
-      border-radius: 8px;
+      min-height: 70px;
+      padding: 10px;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
       font-family: inherit;
       font-size: 13px;
       resize: vertical;
-      transition: border-color 0.2s;
+      transition: border-color 0.15s;
     }
     
     .add-note-form textarea:focus {
       outline: none;
-      border-color: #1a73e8;
-      box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.1);
+      border-color: #999;
     }
     
     .add-note-form button {
-      margin-top: 10px;
+      margin-top: 8px;
       width: 100%;
-      padding: 10px;
-      background: #1a73e8;
+      padding: 9px;
+      background: #333;
       color: white;
       border: none;
-      border-radius: 6px;
-      font-size: 13px;
+      border-radius: 4px;
+      font-size: 12px;
       font-weight: 500;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: background 0.15s;
     }
     
     .add-note-form button:hover {
-      background: #1557b0;
+      background: #000;
     }
     
     .add-note-form button:active {
-      background: #0d47a1;
+      background: #000;
     }
     
     .add-note-form button:disabled {
-      background: #dadce0;
+      background: #ddd;
       cursor: not-allowed;
     }
     
     /* Scrollbar styling */
     .notes-section::-webkit-scrollbar {
-      width: 8px;
+      width: 6px;
     }
     
     .notes-section::-webkit-scrollbar-track {
-      background: #f1f1f1;
+      background: transparent;
     }
     
     .notes-section::-webkit-scrollbar-thumb {
-      background: #c1c1c1;
-      border-radius: 4px;
+      background: #ddd;
+      border-radius: 3px;
     }
     
     .notes-section::-webkit-scrollbar-thumb:hover {
-      background: #a8a8a8;
+      background: #ccc;
     }
   </style>
 </head>
@@ -380,16 +436,20 @@
   <div class="container">
     <!-- Header -->
     <div class="header">
-      <h2>📝 Context Buddy</h2>
+      <div class="header-top">
+        <div class="header-left">
+          <button class="close-btn" id="closeSidebarBtn" title="Close">×</button>
+          <h2>Context Buddy</h2>
+        </div>
+        <button class="switch-side-btn" id="switchSideBtn" title="Switch side">⇄</button>
+      </div>
       
       <!-- Navigation Tabs -->
       <div class="nav-tabs">
         <button class="nav-tab active" data-view="current" id="tabCurrent">
-          <span class="tab-icon">📍</span>
           <span>Current</span>
         </button>
         <button class="nav-tab" data-view="all" id="tabAll">
-          <span class="tab-icon">📚</span>
           <span>All Notes</span>
         </button>
       </div>
@@ -406,15 +466,15 @@
           <label class="control-label">Filter by App:</label>
           <select id="appFilter" class="filter-select">
             <option value="all">All Apps</option>
-            <option value="gmail">📧 Gmail</option>
-            <option value="meet">🎥 Meet</option>
-            <option value="docs">📝 Docs</option>
-            <option value="calendar">📅 Calendar</option>
-            <option value="youtube">▶️ YouTube</option>
+            <option value="gmail">Gmail</option>
+            <option value="meet">Meet</option>
+            <option value="docs">Docs</option>
+            <option value="calendar">Calendar</option>
+            <option value="youtube">YouTube</option>
           </select>
         </div>
         <div class="sort-section">
-          <label class="control-label">Sort by:</label>
+          <label class="control-label">Sort:</label>
           <select id="sortOrder" class="filter-select">
             <option value="newest">Newest First</option>
             <option value="oldest">Oldest First</option>
@@ -430,8 +490,8 @@
         <div class="section-title">Notes for this context</div>
         <ul class="notes-list" id="notesList">
           <div class="empty-state">
-            <div class="empty-state-icon">📋</div>
-            <div class="empty-state-text">No notes yet. Add your first note below!</div>
+            <div class="empty-state-icon">No notes</div>
+            <div class="empty-state-text">Add your first note below</div>
           </div>
         </ul>
         
@@ -450,8 +510,8 @@
         </div>
         <ul class="notes-list" id="allNotesList">
           <div class="empty-state">
-            <div class="empty-state-icon">📋</div>
-            <div class="empty-state-text">No notes found!</div>
+            <div class="empty-state-icon">No notes</div>
+            <div class="empty-state-text">No notes found</div>
           </div>
         </ul>
       </div>

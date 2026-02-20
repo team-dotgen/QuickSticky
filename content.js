@@ -9,7 +9,6 @@ let sidebarInjected = false;
 let sidebarOpen = false;
 let toggleButton = null;
 let sidebarSide = 'right'; // 'left' or 'right'
-let sideSwitchButton = null;
 
 /**
  * Initialize the extension when page loads
@@ -42,7 +41,15 @@ async function init() {
   
   // Create toggle button
   createToggleButton();
-  createSideSwitchButton();
+  
+  // Listen for messages from sidebar
+  window.addEventListener('message', (event) => {
+    if (event.data && event.data.type === 'SWITCH_SIDE') {
+      switchSide();
+    } else if (event.data && event.data.type === 'CLOSE_SIDEBAR') {
+      closeSidebar();
+    }
+  });
   
   // Check if notes exist for this context
   const hasNotes = await checkForNotes(currentContext.key);
@@ -364,7 +371,7 @@ function createToggleButton() {
   toggleButton.id = 'context-buddy-toggle';
   toggleButton.className = `side-${sidebarSide}`;
   toggleButton.innerHTML = sidebarSide === 'right' ? '◀' : '▶';
-  toggleButton.title = 'Context Buddy Notes';
+  toggleButton.title = 'Notes';
   
   toggleButton.addEventListener('click', () => {
     if (sidebarOpen) {
@@ -375,25 +382,6 @@ function createToggleButton() {
   });
   
   document.body.appendChild(toggleButton);
-}
-
-/**
- * Create side switch button
- */
-function createSideSwitchButton() {
-  if (sideSwitchButton) return;
-  
-  sideSwitchButton = document.createElement('div');
-  sideSwitchButton.id = 'context-buddy-side-switch';
-  sideSwitchButton.className = `side-${sidebarSide}`;
-  sideSwitchButton.innerHTML = '⇄';
-  sideSwitchButton.title = 'Switch sidebar side';
-  
-  sideSwitchButton.addEventListener('click', () => {
-    switchSide();
-  });
-  
-  document.body.appendChild(sideSwitchButton);
 }
 
 /**
@@ -410,15 +398,10 @@ function switchSide() {
   sidebarSide = sidebarSide === 'right' ? 'left' : 'right';
   localStorage.setItem('context-buddy-side', sidebarSide);
   
-  // Update toggle button
+  // Update toggle button arrow
   if (toggleButton) {
     toggleButton.className = `side-${sidebarSide}`;
     toggleButton.innerHTML = sidebarSide === 'right' ? '◀' : '▶';
-  }
-  
-  // Update side switch button
-  if (sideSwitchButton) {
-    sideSwitchButton.className = `side-${sidebarSide}`;
   }
   
   // Update sidebar if it exists
@@ -501,18 +484,11 @@ function injectSidebar() {
   sidebarContainer.id = 'context-buddy-sidebar';
   sidebarContainer.className = `side-${sidebarSide}`;
   
-  // Create close button
-  const closeButton = document.createElement('div');
-  closeButton.className = 'context-buddy-close';
-  closeButton.innerHTML = '×';
-  closeButton.addEventListener('click', closeSidebar);
-  
   // Create iframe for isolated environment
   const iframe = document.createElement('iframe');
   iframe.src = chrome.runtime.getURL('sidebar.html');
   iframe.id = 'context-buddy-iframe';
   
-  sidebarContainer.appendChild(closeButton);
   sidebarContainer.appendChild(iframe);
   document.body.appendChild(sidebarContainer);
   

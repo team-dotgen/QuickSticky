@@ -52,6 +52,24 @@ function setupEventListeners() {
     sortOrder = e.target.value;
     renderAllNotes();
   });
+  
+  // Switch side button
+  const switchSideBtn = document.getElementById('switchSideBtn');
+  if (switchSideBtn) {
+    switchSideBtn.addEventListener('click', () => {
+      // Send message to parent window (content script)
+      window.parent.postMessage({ type: 'SWITCH_SIDE' }, '*');
+    });
+  }
+  
+  // Close button
+  const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+  if (closeSidebarBtn) {
+    closeSidebarBtn.addEventListener('click', () => {
+      // Send message to parent window (content script)
+      window.parent.postMessage({ type: 'CLOSE_SIDEBAR' }, '*');
+    });
+  }
 }
 
 /**

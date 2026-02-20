@@ -3,84 +3,45 @@
  * These styles are injected into the host page
  */
 
-/* Toggle Button - Side arrow at middle edge */
+/* Toggle Button - Transparent side arrow */
 #context-buddy-toggle {
   position: fixed;
   top: 50%;
   transform: translateY(-50%);
-  width: 32px;
-  height: 80px;
-  background: #1a73e8;
-  color: white;
+  width: 24px;
+  height: 100px;
+  background: rgba(26, 115, 232, 0.1);
+  color: rgba(26, 115, 232, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
+  font-size: 18px;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   z-index: 2147483646;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   user-select: none;
+  border: none;
 }
 
 #context-buddy-toggle.side-right {
   right: 0;
-  border-radius: 8px 0 0 8px;
+  border-radius: 4px 0 0 4px;
 }
 
 #context-buddy-toggle.side-left {
   left: 0;
-  border-radius: 0 8px 8px 0;
+  border-radius: 0 4px 4px 0;
 }
 
 #context-buddy-toggle:hover {
-  background: #1557b0;
-  width: 36px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  background: rgba(26, 115, 232, 0.95);
+  color: white;
+  width: 28px;
+  font-weight: bold;
 }
 
 #context-buddy-toggle:active {
-  transform: translateY(-50%) scale(0.95);
-}
-
-/* Side Switch Button */
-#context-buddy-side-switch {
-  position: fixed;
-  top: calc(50% + 50px);
-  transform: translateY(-50%);
-  width: 28px;
-  height: 28px;
-  background: #5f6368;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  z-index: 2147483646;
-  transition: all 0.3s ease;
-  user-select: none;
-}
-
-#context-buddy-side-switch.side-right {
-  right: 0;
-  border-radius: 6px 0 0 6px;
-}
-
-#context-buddy-side-switch.side-left {
-  left: 0;
-  border-radius: 0 6px 6px 0;
-}
-
-#context-buddy-side-switch:hover {
-  background: #3c4043;
-  width: 32px;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-}
-
-#context-buddy-side-switch:active {
-  transform: translateY(-50%) scale(0.9);
+  transform: translateY(-50%) scale(0.98);
 }
 
 /* Sidebar Container */
@@ -90,7 +51,7 @@
   width: 320px;
   height: 100vh;
   background: white;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
   z-index: 2147483647;
   transition: all 0.3s ease;
   display: flex;
@@ -113,34 +74,9 @@
   left: 0;
 }
 
-/* Close Button */
+/* Close Button - Hidden (now inside iframe) */
 .context-buddy-close {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 32px;
-  height: 32px;
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  font-weight: 300;
-  color: #5f6368;
-  cursor: pointer;
-  z-index: 10;
-  transition: all 0.2s ease;
-  user-select: none;
-}
-
-.context-buddy-close:hover {
-  background: rgba(0, 0, 0, 0.1);
-  color: #333;
-}
-
-.context-buddy-close:active {
-  background: rgba(0, 0, 0, 0.15);
+  display: none;
 }
 
 /* Iframe */
@@ -153,8 +89,7 @@
 
 /* Ensure sidebar doesn't interfere with page layout */
 #context-buddy-sidebar,
-#context-buddy-toggle,
-#context-buddy-side-switch {
+#context-buddy-toggle {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
@@ -181,14 +116,12 @@
   }
   
   #context-buddy-toggle {
-    width: 28px;
-    height: 60px;
-    font-size: 18px;
+    width: 20px;
+    height: 80px;
+    font-size: 16px;
   }
   
-  #context-buddy-side-switch {
+  #context-buddy-toggle:hover {
     width: 24px;
-    height: 24px;
-    font-size: 14px;
   }
 }
