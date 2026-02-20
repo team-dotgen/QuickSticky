@@ -1,0 +1,194 @@
+/**
+ * Sidebar Container Styles for Context Buddy
+ * These styles are injected into the host page
+ */
+
+/* Toggle Button - Side arrow at middle edge */
+#context-buddy-toggle {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 80px;
+  background: #1a73e8;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 2147483646;
+  transition: all 0.3s ease;
+  user-select: none;
+}
+
+#context-buddy-toggle.side-right {
+  right: 0;
+  border-radius: 8px 0 0 8px;
+}
+
+#context-buddy-toggle.side-left {
+  left: 0;
+  border-radius: 0 8px 8px 0;
+}
+
+#context-buddy-toggle:hover {
+  background: #1557b0;
+  width: 36px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+#context-buddy-toggle:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+/* Side Switch Button */
+#context-buddy-side-switch {
+  position: fixed;
+  top: calc(50% + 50px);
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  background: #5f6368;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  z-index: 2147483646;
+  transition: all 0.3s ease;
+  user-select: none;
+}
+
+#context-buddy-side-switch.side-right {
+  right: 0;
+  border-radius: 6px 0 0 6px;
+}
+
+#context-buddy-side-switch.side-left {
+  left: 0;
+  border-radius: 0 6px 6px 0;
+}
+
+#context-buddy-side-switch:hover {
+  background: #3c4043;
+  width: 32px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+#context-buddy-side-switch:active {
+  transform: translateY(-50%) scale(0.9);
+}
+
+/* Sidebar Container */
+#context-buddy-sidebar {
+  position: fixed;
+  top: 0;
+  width: 320px;
+  height: 100vh;
+  background: white;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
+  z-index: 2147483647;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+#context-buddy-sidebar.side-right {
+  right: -340px;
+}
+
+#context-buddy-sidebar.side-left {
+  left: -340px;
+}
+
+#context-buddy-sidebar.side-right.open {
+  right: 0;
+}
+
+#context-buddy-sidebar.side-left.open {
+  left: 0;
+}
+
+/* Close Button */
+.context-buddy-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 300;
+  color: #5f6368;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.context-buddy-close:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: #333;
+}
+
+.context-buddy-close:active {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+/* Iframe */
+#context-buddy-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: white;
+}
+
+/* Ensure sidebar doesn't interfere with page layout */
+#context-buddy-sidebar,
+#context-buddy-toggle,
+#context-buddy-side-switch {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  #context-buddy-sidebar {
+    width: 100%;
+  }
+  
+  #context-buddy-sidebar.side-right {
+    right: -100%;
+  }
+  
+  #context-buddy-sidebar.side-left {
+    left: -100%;
+  }
+  
+  #context-buddy-sidebar.side-right.open {
+    right: 0;
+  }
+  
+  #context-buddy-sidebar.side-left.open {
+    left: 0;
+  }
+  
+  #context-buddy-toggle {
+    width: 28px;
+    height: 60px;
+    font-size: 18px;
+  }
+  
+  #context-buddy-side-switch {
+    width: 24px;
+    height: 24px;
+    font-size: 14px;
+  }
+}
