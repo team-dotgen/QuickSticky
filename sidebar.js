@@ -12,12 +12,47 @@ let currentView = 'current'; // 'current' or 'all'
 let appFilter = 'all';
 let sortOrder = 'newest';
 
+// Settings
+let settings = {
+  apiKey: '',
+  model: 'llama-3.3-70b-versatile',
+  prompt: 'Analyze the following web page content and provide a concise, informative summary in 2-3 sentences. Focus on the main topic, key points, and any important takeaways. Keep it brief and actionable.\n\nContent:\n{content}'
+};
+
+// Default prompt
+const DEFAULT_PROMPT = 'Analyze the following web page content and provide a concise, informative summary in 2-3 sentences. Focus on the main topic, key points, and any important takeaways. Keep it brief and actionable.\n\nContent:\n{content}';
+
 /**
  * Initialize sidebar when loaded
  */
 function initialize() {
+  loadSettings();
   setupEventListeners();
   setupMessageListener();
+}
+
+/**
+ * Load settings from localStorage
+ */
+function loadSettings() {
+  const saved = localStorage.getItem('context-buddy-settings');
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      settings = { ...settings, ...parsed };
+    } catch (e) {
+      console.error('Failed to load settings:', e);
+    }
+  }
+  
+  // Update settings UI
+  const apiKeyInput = document.getElementById('apiKeyInput');
+  const modelSelect = document.getElementById('modelSelect');
+  const promptInput = document.getElementById('promptInput');
+  
+  if (apiKeyInput) apiKeyInput.value = settings.apiKey || '';
+  if (modelSelect) modelSelect.value = settings.model || 'llama-3.3-70b-versatile';
+  if (promptInput) promptInput.value = settings.prompt || DEFAULT_PROMPT;
 }
 
 /**
@@ -69,6 +104,40 @@ function setupEventListeners() {
       // Send message to parent window (content script)
       window.parent.postMessage({ type: 'CLOSE_SIDEBAR' }, '*');
     });
+  }
+  
+  // Settings button
+  const settingsBtn = document.getElementById('settingsBtn');
+  if (settingsBtn) {
+    settingsBtn.addEventListener('click', openSettings);
+  }
+  
+  // Settings modal close
+  const settingsCloseBtn = document.getElementById('settingsCloseBtn');
+  if (settingsCloseBtn) {
+    settingsCloseBtn.addEventListener('click', closeSettings);
+  }
+  
+  // Settings save
+  const settingsSaveBtn = document.getElementById('settingsSaveBtn');
+  if (settingsSaveBtn) {
+    settingsSaveBtn.addEventListener('click', saveSettings);
+  }
+  
+  // Close modal on background click
+  const settingsModal = document.getElementById('settingsModal');
+  if (settingsModal) {
+    settingsModal.addEventListener('click', (e) => {
+      if (e.target === settingsModal) {
+        closeSettings();
+      }
+    });
+  }
+  
+  // Analyze button
+  const analyzeBtn = document.getElementById('analyzeBtn');
+  if (analyzeBtn) {
+    analyzeBtn.addEventListener('click', analyzePage);
   }
 }
 
@@ -737,6 +806,143 @@ function getAppEmoji(app) {
     'youtube': '▶️'
   };
   return emojis[app] || '📄';
+}
+
+/**
+ * Open settings modal
+ */
+function openSettings() {
+  const modal = document.getElementById('settingsModal');
+  if (modal) {
+    modal.classList.add('show');
+  }
+}
+
+/**
+ * Close settings modal
+ */
+function closeSettings() {
+  const modal = document.getElementById('settingsModal');
+  if (modal) {
+    modal.classList.remove('show');
+  }
+}
+
+/**
+ * Save settings
+ */
+function saveSettings() {
+  const apiKeyInput = document.getElementById('apiKeyInput');
+  const modelSelect = document.getElementById('modelSelect');
+  const promptInput = document.getElementById('promptInput');
+  
+  settings.apiKey = apiKeyInput.value.trim();
+  settings.model = modelSelect.value;
+  settings.prompt = promptInput.value.trim() || DEFAULT_PROMPT;
+  
+  // Save to localStorage
+  localStorage.setItem('context-buddy-settings', JSON.stringify(settings));
+  
+  // Show feedback
+  const saveBtn = document.getElementById('settingsSaveBtn');
+  const originalText = saveBtn.textContent;
+  saveBtn.textContent = 'Saved!';
+  setTimeout(() => {
+    saveBtn.textContent = originalText;
+    closeSettings();
+  }, 1000);
+}
+
+/**
+ * Analyze current page with Groq API
+ */
+async function analyzePage() {
+  const analyzeBtn = document.getElementById('analyzeBtn');
+  
+  // Check if API key is set
+  if (!settings.apiKey) {
+    alert('Please set your Groq API key in Settings first.');
+    openSettings();
+    return;
+  }
+  
+  // Disable button and show loading
+  analyzeBtn.disabled = true;
+  const originalHTML = analyzeBtn.innerHTML;
+  analyzeBtn.innerHTML = '<span>⏳</span><span>Analyzing...</span>';
+  
+  try {
+    // Get page content from parent window
+    window.parent.postMessage({ type: 'GET_PAGE_CONTENT' }, '*');
+    
+    // Wait for response with page content
+    const pageContent = await new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => reject(new Error('Timeout')), 5000);
+      
+      const handler = (event) => {
+        if (event.data && event.data.type === 'PAGE_CONTENT') {
+          clearTimeout(timeout);
+          window.removeEventListener('message', handler);
+          resolve(event.data.content);
+        }
+      };
+      
+      window.addEventListener('message', handler);
+    });
+    
+    // Prepare prompt
+    const prompt = settings.prompt.replace('{content}', pageContent);
+    
+    // Call Groq API
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${settings.apiKey}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        model: settings.model,
+        messages: [
+          {
+            role: 'user',
+            content: prompt
+          }
+        ],
+        temperature: 0.7,
+        max_tokens: 500
+      })
+    });
+    
+    if (!response.ok) {
+      throw new Error(`API error: ${response.statusText}`);
+    }
+    
+    const data = await response.json();
+    const summary = data.choices[0]?.message?.content;
+    
+    if (!summary) {
+      throw new Error('No summary generated');
+    }
+    
+    // Add summary as a note
+    const noteInput = document.getElementById('noteInput');
+    noteInput.value = `📊 AI Summary:\n${summary}`;
+    
+    // Auto-resize textarea
+    noteInput.style.height = 'auto';
+    noteInput.style.height = noteInput.scrollHeight + 'px';
+    
+    // Focus on textarea
+    noteInput.focus();
+    
+  } catch (error) {
+    console.error('Analysis failed:', error);
+    alert(`Failed to analyze page: ${error.message}`);
+  } finally {
+    // Re-enable button
+    analyzeBtn.disabled = false;
+    analyzeBtn.innerHTML = originalHTML;
+  }
 }
 
 // Initialize when DOM is ready

@@ -48,6 +48,16 @@ async function init() {
       switchSide();
     } else if (event.data && event.data.type === 'CLOSE_SIDEBAR') {
       closeSidebar();
+    } else if (event.data && event.data.type === 'GET_PAGE_CONTENT') {
+      // Extract page content and send back to sidebar
+      const pageContent = extractPageContent();
+      const iframe = document.getElementById('context-buddy-iframe');
+      if (iframe && iframe.contentWindow) {
+        iframe.contentWindow.postMessage({
+          type: 'PAGE_CONTENT',
+          content: pageContent
+        }, '*');
+      }
     }
   });
   
@@ -717,6 +727,52 @@ function waitForContextAndUpdate(forceUpdate = false) {
     // Start checking immediately (after initial delay)
     checkAndUpdate();
   }, 2000); // 2 second initial delay
+}
+
+/**
+ * Extract meaningful text content from the current page
+ */
+function extractPageContent() {
+  const hostname = window.location.hostname;
+  let content = '';
+  
+  // Gmail specific extraction
+  if (hostname === 'mail.google.com') {
+    const subject = document.querySelector('h2.hP')?.textContent || '';
+    const emailBody = document.querySelector('.a3s.aiL')?.textContent || '';
+    content = `Subject: ${subject}\n\n${emailBody}`.substring(0, 3000);
+  }
+  // YouTube specific extraction
+  else if (hostname === 'www.youtube.com') {
+    const title = document.querySelector('h1.ytd-video-primary-info-renderer')?.textContent || 
+                  document.querySelector('h1 yt-formatted-string')?.textContent || '';
+    const description = document.querySelector('#description yt-formatted-string')?.textContent || '';
+    content = `Title: ${title}\n\nDescription: ${description}`.substring(0, 3000);
+  }
+  // Google Docs specific extraction
+  else if (hostname === 'docs.google.com') {
+    const docTitle = document.querySelector('.docs-title-input')?.textContent || '';
+    const docContent = document.querySelector('.kix-page')?.textContent || '';
+    content = `Title: ${docTitle}\n\n${docContent}`.substring(0, 3000);
+  }
+  // Generic extraction for other pages
+  else {
+    const title = document.title;
+    const mainContent = document.querySelector('main')?.textContent || 
+                       document.querySelector('article')?.textContent ||
+                       document.body.textContent;
+    
+    // Clean up the content
+    const cleaned = mainContent
+      .replace(/\s+/g, ' ')
+      .replace(/\n+/g, '\n')
+      .trim()
+      .substring(0, 3000);
+    
+    content = `Title: ${title}\n\n${cleaned}`;
+  }
+  
+  return content || 'Unable to extract page content';
 }
 
 // Start the extension
