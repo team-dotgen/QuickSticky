@@ -10,8 +10,8 @@
   transform: translateY(-50%);
   width: 24px;
   height: 100px;
-  background: rgba(26, 115, 232, 0.1);
-  color: rgba(26, 115, 232, 0.4);
+  background: rgba(0, 0, 0, 0.05);
+  color: rgba(0, 0, 0, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -34,7 +34,7 @@
 }
 
 #context-buddy-toggle:hover {
-  background: rgba(26, 115, 232, 0.95);
+  background: rgba(0, 0, 0, 0.9);
   color: white;
   width: 28px;
   font-weight: bold;

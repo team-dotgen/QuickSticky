@@ -926,7 +926,7 @@ async function analyzePage() {
     
     // Add summary as a note
     const noteInput = document.getElementById('noteInput');
-    noteInput.value = `📊 AI Summary:\n${summary}`;
+    noteInput.value = `AI Summary:\n${summary}`;
     
     // Auto-resize textarea
     noteInput.style.height = 'auto';
