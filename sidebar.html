@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Context Buddy</title>
+  <title>DotNCue</title>
   <style>
     * {
       margin: 0;
@@ -40,20 +40,22 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 12px;
-      gap: 8px;
+      gap: 4px;
     }
     
     .header-left {
       display: flex;
       align-items: center;
-      gap: 8px;
-      flex: 1;
+      gap: 2px;
+      flex: 0 1 auto;
+      min-width: 0;
     }
     
     .header-right {
       display: flex;
       align-items: center;
       gap: 6px;
+      flex-shrink: 0;
     }
     
     .header h2 {
@@ -61,6 +63,15 @@
       font-weight: 600;
       color: #333;
       margin: 0;
+    }
+
+    .brand-icon {
+      width: 168px;
+      height: 56px;
+      display: block;
+      object-fit: contain;
+      flex-shrink: 0;
+      margin-left: -4px;
     }
     
     .header-btn {
@@ -598,12 +609,12 @@
     <div class="header">
       <div class="header-top">
         <div class="header-left">
-          <button class="close-btn" id="closeSidebarBtn" title="Close">×</button>
-          <h2>Context Buddy</h2>
+          <button class="close-btn" id="closeSidebarBtn" title="Close">&times;</button>
+          <img src="dotncue.ico" alt="DotNCue" class="brand-icon">
         </div>
         <div class="header-right">
-          <button class="header-btn" id="settingsBtn" title="Settings">⚙</button>
-          <button class="header-btn" id="switchSideBtn" title="Switch side">⇄</button>
+          <button class="header-btn" id="settingsBtn" title="Settings">&#9881;</button>
+          <button class="header-btn" id="switchSideBtn" title="Switch side">&#8646;</button>
         </div>
       </div>
       
@@ -652,7 +663,7 @@
       <div id="currentView" class="view-content">
         <!-- Analyze Button -->
         <button class="analyze-btn" id="analyzeBtn">
-          <span></span>
+          <span>&#10024;</span>
           <span>Analyze Page</span>
         </button>
         
@@ -704,7 +715,7 @@
     <div class="settings-content">
       <div class="settings-header">
         <h3>Settings</h3>
-        <button class="settings-close" id="settingsCloseBtn">×</button>
+        <button class="settings-close" id="settingsCloseBtn">&times;</button>
       </div>
       
       <div class="settings-section">
@@ -746,3 +757,5 @@
   <script src="sidebar.js"></script>
 </body>
 </html>
+
+

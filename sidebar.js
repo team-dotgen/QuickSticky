@@ -1,5 +1,5 @@
-/**
- * Sidebar Logic for Context Buddy
+﻿/**
+ * Sidebar Logic for DotNCue
  * Handles note storage, retrieval, and UI updates
  */
 
@@ -35,7 +35,7 @@ function initialize() {
  * Load settings from localStorage
  */
 function loadSettings() {
-  const saved = localStorage.getItem('context-buddy-settings');
+  const saved = localStorage.getItem('dotncue-settings') || localStorage.getItem('context-buddy-settings');
   if (saved) {
     try {
       const parsed = JSON.parse(saved);
@@ -149,11 +149,11 @@ function setupMessageListener() {
     // Make sure message is from our extension
     if (event.data && event.data.type === 'CONTEXT_UPDATE') {
       const newContext = event.data.context;
-      console.log('Context Buddy Sidebar: Received context update', newContext);
+      console.log('DotNCue Sidebar: Received context update', newContext);
       
       // Check if this is a loading state
       if (newContext.isLoading) {
-        console.log('Context Buddy Sidebar: Showing loading state');
+        console.log('DotNCue Sidebar: Showing loading state');
         currentContext = newContext;
         showLoadingState();
         return;
@@ -168,14 +168,14 @@ function setupMessageListener() {
       const urlChanged = previousUrl && previousUrl !== currentContext?.url;
       
       if (urlChanged || !previousUrl || previousTitle === 'Loading...') {
-        console.log('Context Buddy Sidebar: URL changed or loading complete, triggering full reload');
+        console.log('DotNCue Sidebar: URL changed or loading complete, triggering full reload');
         console.log('  Previous:', previousTitle, '-', previousUrl);
         console.log('  Current:', currentContext.title, '-', currentContext.url);
         
         // Full reload when URL changes or first load or after loading state
         reloadExtension();
       } else {
-        console.log('Context Buddy Sidebar: Same URL, just updating display');
+        console.log('DotNCue Sidebar: Same URL, just updating display');
         // Just update display if same URL (title might have changed)
         updateContextDisplay();
       }
@@ -187,7 +187,7 @@ function setupMessageListener() {
  * Fully reload the extension with new context
  */
 function reloadExtension() {
-  console.log('Context Buddy Sidebar: Starting full reload for context', currentContext);
+  console.log('DotNCue Sidebar: Starting full reload for context', currentContext);
   
   // Show loading state
   showLoadingState();
@@ -212,7 +212,7 @@ function reloadExtension() {
     hideLoadingState();
     
     // Log completion
-    console.log('Context Buddy Sidebar: Reload complete');
+    console.log('DotNCue Sidebar: Reload complete');
   }, 100);
 }
 
@@ -226,14 +226,14 @@ function showLoadingState() {
   
   if (titleElement) {
     titleElement.style.opacity = '0.5';
-    titleElement.textContent = '⏳ Loading new context...';
+    titleElement.textContent = '\u23f3 Loading new context...';
   }
   
   // Clear current notes immediately to prevent showing old content
   if (notesList) {
     notesList.innerHTML = `
       <div class="empty-state">
-        <div class="empty-state-icon">⏳</div>
+        <div class="empty-state-icon">&#9203;</div>
         <div class="empty-state-text">Loading...</div>
       </div>
     `;
@@ -244,7 +244,7 @@ function showLoadingState() {
     relatedSection.style.display = 'none';
   }
   
-  console.log('Context Buddy Sidebar: Loading state displayed');
+  console.log('DotNCue Sidebar: Loading state displayed');
 }
 
 /**
@@ -270,45 +270,45 @@ function updateContextDisplay() {
   appElement.textContent = currentContext.app;
   
   // Update context title with appropriate emoji
-  let emoji = '📄';
+  let emoji = '\ud83d\udcc4';
   
   // First check by app type
   switch (currentContext.app) {
     case 'gmail':
-      emoji = '📧';
+      emoji = '\ud83d\udce7';
       break;
     case 'meet':
-      emoji = '🎥';
+      emoji = '\ud83c\udfa5';
       break;
     case 'docs':
-      emoji = '📝';
+      emoji = '\ud83d\udcdd';
       break;
     case 'calendar':
-      emoji = '📅';
+      emoji = '\ud83d\udcc5';
       break;
     case 'youtube':
       // For YouTube, choose emoji based on page type
       if (currentContext.title === 'Home Page') {
-        emoji = '🏠';
+        emoji = '\ud83c\udfe0';
       } else if (currentContext.title?.startsWith('Search:')) {
-        emoji = '🔍';
+        emoji = '\ud83d\udd0d';
       } else if (currentContext.title === 'Subscriptions') {
-        emoji = '📺';
+        emoji = '\ud83d\udcfa';
       } else if (currentContext.title === 'History') {
-        emoji = '🕒';
+        emoji = '\ud83d\udd52';
       } else if (currentContext.title === 'Library') {
-        emoji = '📚';
+        emoji = '\ud83d\udcda';
       } else if (currentContext.title === 'Trending') {
-        emoji = '🔥';
+        emoji = '\ud83d\udd25';
       } else {
-        emoji = '▶️'; // Video page
+        emoji = '\u25b6\ufe0f'; // Video page
       }
       break;
   }
   
   titleElement.textContent = `${emoji} ${currentContext.title}`;
   
-  console.log('Context Buddy Sidebar: Display updated to', currentContext.title);
+  console.log('DotNCue Sidebar: Display updated to', currentContext.title);
 }
 
 /**
@@ -338,7 +338,7 @@ function renderNotes() {
     // Show empty state
     notesList.innerHTML = `
       <div class="empty-state">
-        <div class="empty-state-icon">📋</div>
+        <div class="empty-state-icon">&#128203;</div>
         <div class="empty-state-text">No notes yet. Add your first note below!</div>
       </div>
     `;
@@ -721,7 +721,7 @@ function renderAllNotes() {
   if (filteredNotes.length === 0) {
     allNotesList.innerHTML = `
       <div class="empty-state">
-        <div class="empty-state-icon">📋</div>
+        <div class="empty-state-icon">&#128203;</div>
         <div class="empty-state-text">No notes found!</div>
       </div>
     `;
@@ -799,13 +799,13 @@ function createAllNotesElement(note) {
  */
 function getAppEmoji(app) {
   const emojis = {
-    'gmail': '📧',
-    'meet': '🎥',
-    'docs': '📝',
-    'calendar': '📅',
-    'youtube': '▶️'
+    'gmail': '\ud83d\udce7',
+    'meet': '\ud83c\udfa5',
+    'docs': '\ud83d\udcdd',
+    'calendar': '\ud83d\udcc5',
+    'youtube': '\u25b6\ufe0f'
   };
-  return emojis[app] || '📄';
+  return emojis[app] || '\ud83d\udcc4';
 }
 
 /**
@@ -841,7 +841,7 @@ function saveSettings() {
   settings.prompt = promptInput.value.trim() || DEFAULT_PROMPT;
   
   // Save to localStorage
-  localStorage.setItem('context-buddy-settings', JSON.stringify(settings));
+  localStorage.setItem('dotncue-settings', JSON.stringify(settings));
   
   // Show feedback
   const saveBtn = document.getElementById('settingsSaveBtn');
@@ -869,7 +869,7 @@ async function analyzePage() {
   // Disable button and show loading
   analyzeBtn.disabled = true;
   const originalHTML = analyzeBtn.innerHTML;
-  analyzeBtn.innerHTML = '<span>⏳</span><span>Analyzing...</span>';
+  analyzeBtn.innerHTML = '<span>&#9203;</span><span>Analyzing...</span>';
   
   try {
     // Get page content from parent window
@@ -951,3 +951,4 @@ if (document.readyState === 'loading') {
 } else {
   initialize();
 }
+

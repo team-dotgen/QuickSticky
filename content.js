@@ -1,5 +1,5 @@
-/**
- * Content Script for Context Buddy
+﻿/**
+ * Content Script for DotNCue
  * Detects page context, extracts metadata, and manages sidebar UI
  */
 
@@ -27,14 +27,14 @@ async function init() {
   currentContext = detectContext();
   
   if (!currentContext) {
-    console.log('Context Buddy: Unsupported page');
+    console.log('DotNCue: Unsupported page');
     return;
   }
   
-  console.log('Context Buddy: Detected context', currentContext);
+  console.log('DotNCue: Detected context', currentContext);
   
   // Load sidebar side preference
-  const savedSide = localStorage.getItem('context-buddy-side');
+  const savedSide = localStorage.getItem('dotncue-side') || localStorage.getItem('context-buddy-side');
   if (savedSide === 'left' || savedSide === 'right') {
     sidebarSide = savedSide;
   }
@@ -261,8 +261,8 @@ function detectYouTubeContext() {
   let channel = '';
   const url = window.location.href;
   
-  console.log('Context Buddy: detectYouTubeContext called for URL:', url);
-  console.log('Context Buddy: Current document.title:', document.title);
+  console.log('DotNCue: detectYouTubeContext called for URL:', url);
+  console.log('DotNCue: Current document.title:', document.title);
   
   // Check if we're on the homepage specifically
   if (url === 'https://www.youtube.com/' || url === 'https://www.youtube.com') {
@@ -289,19 +289,19 @@ function detectYouTubeContext() {
     
     if (titleElement) {
       title = titleElement.textContent?.trim() || '';
-      console.log('Context Buddy: Title from DOM element:', title);
+      console.log('DotNCue: Title from DOM element:', title);
     }
     
     // If no title found via selectors, try getting from page title
     if (!title || title === 'YouTube') {
       // Force re-read of document.title (don't use cached value)
       const pageTitle = document.querySelector('title')?.textContent || document.title;
-      console.log('Context Buddy: Title from document.title:', pageTitle);
+      console.log('DotNCue: Title from document.title:', pageTitle);
       
       // YouTube video titles are in format "Video Title - YouTube"
       if (pageTitle && pageTitle !== 'YouTube' && !pageTitle.includes('watch?v=')) {
         title = pageTitle.replace(' - YouTube', '').trim();
-        console.log('Context Buddy: Extracted title:', title);
+        console.log('DotNCue: Extracted title:', title);
       }
     }
     
@@ -345,7 +345,7 @@ function detectYouTubeContext() {
     }
   }
   
-  console.log('Context Buddy: Final detected title:', title);
+  console.log('DotNCue: Final detected title:', title);
   
   const key = `youtube:${title}`;
   
@@ -380,7 +380,7 @@ function createToggleButton() {
   toggleButton = document.createElement('div');
   toggleButton.id = 'context-buddy-toggle';
   toggleButton.className = `side-${sidebarSide}`;
-  toggleButton.innerHTML = sidebarSide === 'right' ? '◀' : '▶';
+  toggleButton.textContent = sidebarSide === 'right' ? '\u25c0' : '\u25b6';
   toggleButton.title = 'Notes';
   
   toggleButton.addEventListener('click', () => {
@@ -406,12 +406,12 @@ function switchSide() {
   
   // Switch side
   sidebarSide = sidebarSide === 'right' ? 'left' : 'right';
-  localStorage.setItem('context-buddy-side', sidebarSide);
+  localStorage.setItem('dotncue-side', sidebarSide);
   
   // Update toggle button arrow
   if (toggleButton) {
     toggleButton.className = `side-${sidebarSide}`;
-    toggleButton.innerHTML = sidebarSide === 'right' ? '◀' : '▶';
+    toggleButton.textContent = sidebarSide === 'right' ? '\u25c0' : '\u25b6';
   }
   
   // Update sidebar if it exists
@@ -519,7 +519,7 @@ function observeUrlChanges() {
     
     // Check for URL change
     if (lastUrl !== currentUrl) {
-      console.log('Context Buddy: URL changed from', lastUrl, 'to', currentUrl);
+      console.log('DotNCue: URL changed from', lastUrl, 'to', currentUrl);
       lastUrl = currentUrl;
       lastTitle = currentTitle;
       
@@ -528,7 +528,7 @@ function observeUrlChanges() {
     }
     // Check for title change (important for YouTube video pages)
     else if (lastTitle !== currentTitle && currentUrl.includes('watch?v=')) {
-      console.log('Context Buddy: Title changed from', lastTitle, 'to', currentTitle);
+      console.log('DotNCue: Title changed from', lastTitle, 'to', currentTitle);
       lastTitle = currentTitle;
       
       // Title changed on video page, update context
@@ -545,7 +545,7 @@ function observeUrlChanges() {
   const titleObserver = new MutationObserver(() => {
     const currentTitle = document.title;
     if (lastTitle !== currentTitle && window.location.href.includes('watch?v=')) {
-      console.log('Context Buddy: Document title changed to', currentTitle);
+      console.log('DotNCue: Document title changed to', currentTitle);
       lastTitle = currentTitle;
       waitForContextAndUpdate();
     }
@@ -566,21 +566,21 @@ function observeUrlChanges() {
   
   history.pushState = function() {
     originalPushState.apply(this, arguments);
-    console.log('Context Buddy: pushState detected');
+    console.log('DotNCue: pushState detected');
     // Force update for navigation
     waitForContextAndUpdate(true);
   };
   
   history.replaceState = function() {
     originalReplaceState.apply(this, arguments);
-    console.log('Context Buddy: replaceState detected');
+    console.log('DotNCue: replaceState detected');
     // Force update for navigation
     waitForContextAndUpdate(true);
   };
   
   // Listen for popstate (back/forward button)
   window.addEventListener('popstate', () => {
-    console.log('Context Buddy: popstate detected (back/forward button)');
+    console.log('DotNCue: popstate detected (back/forward button)');
     lastUrl = window.location.href;
     lastTitle = document.title;
     // Force update immediately for back/forward navigation with lenient timing
@@ -589,7 +589,7 @@ function observeUrlChanges() {
   
   // Listen for YouTube's navigation events
   window.addEventListener('yt-navigate-finish', () => {
-    console.log('Context Buddy: yt-navigate-finish detected');
+    console.log('DotNCue: yt-navigate-finish detected');
     lastUrl = window.location.href;
     lastTitle = document.title;
     // Force update for YouTube navigation
@@ -597,18 +597,18 @@ function observeUrlChanges() {
   });
   
   window.addEventListener('yt-navigate-start', () => {
-    console.log('Context Buddy: yt-navigate-start detected');
+    console.log('DotNCue: yt-navigate-start detected');
   });
   
   window.addEventListener('yt-page-data-updated', () => {
-    console.log('Context Buddy: yt-page-data-updated detected');
+    console.log('DotNCue: yt-page-data-updated detected');
     waitForContextAndUpdate();
   });
   
   // Additional event for page visibility (when user comes back to tab)
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden && window.location.href !== lastUrl) {
-      console.log('Context Buddy: Page visible and URL changed');
+      console.log('DotNCue: Page visible and URL changed');
       lastUrl = window.location.href;
       lastTitle = document.title;
       // Force update when returning to tab
@@ -640,11 +640,11 @@ function waitForContextAndUpdate(forceUpdate = false) {
     }
   }
   
-  console.log('Context Buddy: URL changed to', url, '- waiting for title to update...');
+  console.log('DotNCue: URL changed to', url, '- waiting for title to update...');
   
   // Wait for page to fully update (2 seconds)
   setTimeout(() => {
-    console.log('Context Buddy: Starting context detection, current document.title:', document.title);
+    console.log('DotNCue: Starting context detection, current document.title:', document.title);
     
     let attempts = 0;
     const maxAttempts = 25; // Try for up to 5 seconds after initial wait
@@ -656,7 +656,7 @@ function waitForContextAndUpdate(forceUpdate = false) {
       
       // Check if title changed since last check
       if (currentDocTitle !== lastSeenTitle) {
-        console.log('Context Buddy: Title changed from', lastSeenTitle, 'to', currentDocTitle);
+        console.log('DotNCue: Title changed from', lastSeenTitle, 'to', currentDocTitle);
         lastSeenTitle = currentDocTitle;
       }
       
@@ -671,7 +671,7 @@ function waitForContextAndUpdate(forceUpdate = false) {
       
       // For YouTube homepage, update immediately
       if (url === 'https://www.youtube.com/' || url === 'https://www.youtube.com') {
-        console.log('Context Buddy: Homepage detected');
+        console.log('DotNCue: Homepage detected');
         updateContext(newContext);
         return;
       }
@@ -687,7 +687,7 @@ function waitForContextAndUpdate(forceUpdate = false) {
                             newContext.title.length > 0 &&
                             !newContext.title.includes('watch?v=');
         
-        console.log('Context Buddy: Video page - Title:', newContext.title, 'Valid:', hasRealTitle);
+        console.log('DotNCue: Video page - Title:', newContext.title, 'Valid:', hasRealTitle);
         
         // Update if we have a real title or exhausted attempts
         if (hasRealTitle || attempts >= maxAttempts) {
@@ -719,7 +719,7 @@ function waitForContextAndUpdate(forceUpdate = false) {
       }
       
       // Log the update
-      console.log('Context Buddy: ✓ Context FINALIZED');
+      console.log('DotNCue: âœ“ Context FINALIZED');
       console.log('  Previous:', previousTitle, '('+previousUrl+')');
       console.log('  Current:', currentContext.title, '('+currentContext.url+')');
     }
@@ -777,3 +777,4 @@ function extractPageContent() {
 
 // Start the extension
 initialize();
+

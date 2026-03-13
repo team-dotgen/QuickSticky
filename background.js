@@ -1,12 +1,12 @@
-/**
- * Background Service Worker for Context Buddy
+﻿/**
+ * Background Service Worker for DotNCue
  * Handles extension lifecycle events and message passing
  */
 
 // Initialize extension on installation
 chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === 'install') {
-    console.log('Context Buddy installed successfully');
+    console.log('DotNCue installed successfully');
     
     // Initialize storage structure if needed
     chrome.storage.local.get(null, (data) => {
@@ -17,7 +17,7 @@ chrome.runtime.onInstalled.addListener((details) => {
       }
     });
   } else if (details.reason === 'update') {
-    console.log('Context Buddy updated to version ' + chrome.runtime.getManifest().version);
+    console.log('DotNCue updated to version ' + chrome.runtime.getManifest().version);
   }
 });
 
@@ -33,5 +33,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 // Keep service worker alive if needed
 chrome.runtime.onStartup.addListener(() => {
-  console.log('Context Buddy service worker started');
+  console.log('DotNCue service worker started');
 });
+

@@ -1,6 +1,6 @@
-{
+﻿{
   "manifest_version": 3,
-  "name": "Context Buddy",
+  "name": "DotNCue",
   "version": "1.0.0",
   "description": "A contextual notes assistant that shows private notes based on the page you're viewing",
   "permissions": [
@@ -33,7 +33,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["sidebar.html", "sidebar.js"],
+      "resources": ["sidebar.html", "sidebar.js", "dotncue.ico"],
       "matches": [
         "https://mail.google.com/*",
         "https://meet.google.com/*",
@@ -49,3 +49,4 @@
     "128": "icon128.png"
   }
 }
+
